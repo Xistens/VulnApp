@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Notes{% endblock %} 
+{% block body %}
+<div class="container">
+    <form action="{{ url_for('xml') }}" method="post">
+        <h2 class="text-center">XML Injection</h2>
+        <h4 class="text-center">Welcome {{ user }}</h4>
+        <div class="form-group">
+            <label for="note">XML to parse:</label>
+            <textarea class="form-control" rows="10" id="xml" name="xml"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Insert</button>
+        </div>
+    </form>
+    <div class="panel panel-default">
+        <div class="panel-heading">Result:</div>
+        <div class="panel-body">{{ result }}</div>
+    </div>
+</div>
+</body>
+</html>
+{% endblock %}    

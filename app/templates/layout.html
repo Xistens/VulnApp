@@ -41,6 +41,8 @@
                     {% else %}
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     <li><a href="{{ url_for('notes') }}">Notes</a></li>
+                    <li><a href="{{ url_for('book') }}?title=test">Books</a></li>
+                    <li><a href="{{ url_for('xml') }}">XML</a></li>
                     <li><a href="{{ url_for('changepwd') }}">Profile</a></li>
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     {% endif %}

@@ -18,7 +18,7 @@ class Challenge_Book(Enum):
     BOOK_HARD = 2
 
 CHALLENGE = Challenge.NOTES
-BOOK_CHALLENGE = Challenge_Book.BOOK_EASY
+BOOK_CHALLENGE = Challenge_Book.BOOK_HARD
 DATABASE = "database.db"
 
 from app import db, routes

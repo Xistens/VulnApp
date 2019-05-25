@@ -2,6 +2,7 @@
 from functools import wraps
 from flask import request, render_template, session, flash, redirect, url_for, jsonify
 from app import *
+from lxml import etree
 
 
 def login_required(f):
@@ -13,6 +14,7 @@ def login_required(f):
     return decorated_function
 
 
+@app.route("/")
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -51,6 +53,7 @@ def signup():
         else:
             flash("Username already exists.", "danger")
     return render_template("registration.html")
+
 
 @app.route("/home")
 @login_required
@@ -135,3 +138,25 @@ def book():
                 author=book["author"]
             )
         return ""
+
+
+@app.route("/xml", methods=["POST", "GET"])
+def xml():
+    """
+    XXE Vulnerable
+    """
+    parsed_xml = b""
+    if request.method == "POST":
+        xml = request.form["xml"]
+        try:
+            try:
+                parser = etree.XMLParser(no_network=False, dtd_validation=True)
+                doc = etree.fromstring(str(xml), parser)
+                parsed_xml = etree.tostring(doc)
+            except:
+                parser = etree.XMLParser(no_network=False)
+                doc = etree.fromstring(str(xml), parser)
+                parsed_xml = etree.tostring(doc)
+        except etree.XMLSyntaxError:
+            parsed_xml = b"Invalid XML"
+    return render_template("xml.html", result=parsed_xml.decode("utf-8"))
