@@ -12,13 +12,14 @@ logging.basicConfig(level=logging.DEBUG)
 class Challenge(Enum):
     NOTES = 1
     LOGIN = 2
+    LOGIN_SQLI = 3
 
 class Challenge_Book(Enum):
     BOOK_EASY = 1
     BOOK_HARD = 2
 
-CHALLENGE = Challenge.NOTES
-BOOK_CHALLENGE = Challenge_Book.BOOK_HARD
+CHALLENGE = Challenge.LOGIN_SQLI
+BOOK_CHALLENGE = Challenge_Book.BOOK_EASY
 DATABASE = "database.db"
 
 from app import db, routes

@@ -27,15 +27,29 @@ def login():
 
         user = ""
         # Check if user exists
-        user = db.sql_query("SELECT id FROM users WHERE username = ? AND password = ?", 
-            [username, password], one=True)
+        if CHALLENGE == Challenge.LOGIN_SQLI:
+            user = db.sql_query(f"SELECT id, username FROM users WHERE username = '{username}' AND password = '{password}'")
+        else:
+            user = db.sql_query("SELECT id FROM users WHERE username = ? AND password = ?", 
+                [username, password], one=True)
+            user = db.sql_query("SELECT id FROM users WHERE username = ? AND password = ?", 
+                [username, password])
         if user:
-            session["user_id"] = user["id"]
+            if CHALLENGE == Challenge.LOGIN_SQLI:
+                data = []
+                for row in user:
+                    data.append([x for x in row])
+                app.logger.debug(data)
+                session["user_id"] = data[0][0]
+                session["userobj"] = data
+                app.logger.debug(f"Session: {session['user_id']} {session['userobj']}")
+            else:
+                session["user_id"] = user["id"]
             return redirect(url_for("home"))
         else:
             flash("Invalid username or password.", "danger")
     return render_template("login.html")
-
+#admin' union select 1,group_concat(password) from users--
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
